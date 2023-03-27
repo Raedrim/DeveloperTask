@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
+import "./reservationForm.css";
 
-const ReservationForm = () => {
+const ReservationForm = ({ roomId, handleReservationSuccess }) => {
   const [formData, setFormData] = useState({
-    roomId: "",
     dateFrom: "",
     dateTo: "",
     numberOfPeople: "",
@@ -27,13 +27,25 @@ const ReservationForm = () => {
     try {
       const response = await axios.post(
         "http://localhost:5157/api/Reservations",
-        formData
+        {
+          roomId,
+          dateFrom: formData.dateFrom,
+          dateTo: formData.dateTo,
+          numberOfPeople: formData.numberOfPeople,
+        }
       );
 
       setSuccessMessage("Reservation created successfully");
+      console.log(
+        `EMAIL SENT TO test@admin.com FOR CREATED Reservation WITH ID ${response.data.id}`
+      );
       setErrorMessage("");
     } catch (error) {
-      alert(`Error: ${JSON.stringify(error.response.data)}`);
+      if (error.response && error.response.data) {
+        alert(`Error: ${JSON.stringify(error.response.data)}`);
+      } else {
+        alert("An error occurred while submitting the reservation.");
+      }
       setSuccessMessage("");
       setErrorMessage("");
     }
@@ -44,16 +56,6 @@ const ReservationForm = () => {
       {successMessage && <p>{successMessage}</p>}
       {errorMessage && <p>{errorMessage}</p>}
       <form onSubmit={handleSubmit}>
-        <label>
-          Room number:
-          <input
-            type="text"
-            name="roomId"
-            value={formData.roomId}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
         <label>
           Date from:
           <input

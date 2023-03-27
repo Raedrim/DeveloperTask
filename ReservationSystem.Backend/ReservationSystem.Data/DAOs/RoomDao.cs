@@ -32,4 +32,10 @@ public class RoomDao : IRoomDao
         List<Room> rooms = await _context.Rooms.ToListAsync();
         return rooms;
     }
+
+    public async Task<Room> GetRoomByIdAsync(int id)
+    {
+        Room room = await _context.Rooms.FindAsync(id);
+        return room;
+    }
 }

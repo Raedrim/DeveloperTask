@@ -33,8 +33,17 @@ public class RoomsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IEnumerable<Room>> GetAllRooms()
+    public async Task<ActionResult<IEnumerable<Room>>> GetAllRooms()
     {
-        return await _roomLogic.GetAllRoomsAsync();
+        var rooms = await _roomLogic.GetAllRoomsAsync();
+        return Ok(rooms);
     }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Room>> GetRoomById(int id)
+    {
+        var room = await _roomLogic.GetRoomByIdAsync(id);
+        return Ok(room);
+    }
+
 }

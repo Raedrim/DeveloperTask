@@ -25,4 +25,9 @@ public class RoomLogic : IRoomLogic
     {
         return await _roomDao.GetAllRoomsAsync();
     }
+
+    public async Task<Room> GetRoomByIdAsync(int id)
+    {
+        return await _roomDao.GetRoomByIdAsync(id);
+    }
 }
