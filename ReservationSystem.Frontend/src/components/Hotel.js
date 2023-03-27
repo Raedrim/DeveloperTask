@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ReservationForm from "./ReservationForm";
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import "./hotel.css";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+import Table from "react-bootstrap/Table";
 
 const Hotel = () => {
   const [rooms, setRooms] = useState([]);
@@ -11,7 +11,6 @@ const Hotel = () => {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    // Fetch all available rooms
     axios.get("http://localhost:5157/api/Rooms").then((response) => {
       setRooms(response.data);
     });
@@ -29,29 +28,39 @@ const Hotel = () => {
   return (
     <div>
       <h1>Available Rooms</h1>
-      <table>
+      <Table striped bordered hover>
         <thead>
           <tr>
             <th>Room Name</th>
-            <th>Quantity</th>
-            <th>Action</th>
+            <th className="text-center">Quantity</th>
+            <th className="text-center">Action</th>
           </tr>
         </thead>
         <tbody>
           {rooms.map((room) => (
             <tr key={room.id} onClick={() => handleRoomClick(room.id)}>
               <td>{room.name}</td>
-              <td>{room.numberOfPeople}</td>
-              <td>
-                <button>Reserve</button>
+              <td className="text-center">{room.numberOfPeople}</td>
+              <td className="text-center">
+                <Button variant="primary">Reserve</Button>
               </td>
             </tr>
           ))}
         </tbody>
-      </table>
+      </Table>
+
       <Modal show={showModal} onHide={handleCloseModal}>
-        <Modal.Header>
-          <Modal.Title className="text-center w-100">Reserve</Modal.Title>
+        <Modal.Header closeButton>
+          <Modal.Title className="text-center w-100">
+            Reserve
+            <Button
+              variant="link"
+              className="position-absolute top-0 end-0"
+              onClick={handleCloseModal}
+            >
+              <i className="bi bi-x-lg"></i>
+            </Button>
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <ReservationForm roomId={selectedRoomId} />

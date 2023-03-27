@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "./reservationForm.css";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 
-const ReservationForm = ({ roomId, handleReservationSuccess }) => {
+const ReservationForm = ({ roomId }) => {
   const [formData, setFormData] = useState({
     dateFrom: "",
     dateTo: "",
@@ -16,8 +17,9 @@ const ReservationForm = ({ roomId, handleReservationSuccess }) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
     if (formData.numberOfPeople <= 0) {
       setSuccessMessage("");
       setErrorMessage("The number of people must be greater than 0.");
@@ -55,39 +57,38 @@ const ReservationForm = ({ roomId, handleReservationSuccess }) => {
     <div>
       {successMessage && <p>{successMessage}</p>}
       {errorMessage && <p>{errorMessage}</p>}
-      <form onSubmit={handleSubmit}>
-        <label>
-          Date from:
-          <input
+      <Form onSubmit={handleSubmit}>
+        <Form.Group controlId="formDateFrom">
+          <Form.Label>Date from:</Form.Label>
+          <Form.Control
             type="date"
             name="dateFrom"
             value={formData.dateFrom}
             onChange={handleChange}
           />
-        </label>
-        <br />
-        <label>
-          Date to:
-          <input
+        </Form.Group>
+        <Form.Group controlId="formDateTo">
+          <Form.Label>Date to:</Form.Label>
+          <Form.Control
             type="date"
             name="dateTo"
             value={formData.dateTo}
             onChange={handleChange}
           />
-        </label>
-        <br />
-        <label>
-          Number of people:
-          <input
+        </Form.Group>
+        <Form.Group controlId="formNumberOfPeople">
+          <Form.Label>Number of people:</Form.Label>
+          <Form.Control
             type="number"
             name="numberOfPeople"
             value={formData.numberOfPeople}
             onChange={handleChange}
           />
-        </label>
-        <br />
-        <input type="submit" value="Submit" />
-      </form>
+        </Form.Group>
+        <Button variant="primary" type="submit">
+          Reserve
+        </Button>
+      </Form>
     </div>
   );
 };

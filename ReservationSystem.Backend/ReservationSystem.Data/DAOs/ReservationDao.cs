@@ -30,6 +30,11 @@ public class ReservationDao : IReservationDao
                                         room.NumberOfPeople + " people in this room");
         }
 
+        if (dto.DateFrom > dto.DateTo)
+        {
+            throw new ArgumentException("DateFrom cannot be after DateTo");
+        }
+
         //check if there is already a reservation for this room at this time
         var reservations = await _context.Reservations
             .Where(r => r.Room.Id == dto.RoomId)
