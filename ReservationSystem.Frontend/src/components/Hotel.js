@@ -10,17 +10,20 @@ const Hotel = () => {
   const [selectedRoomId, setSelectedRoomId] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
+  // Fetch all available rooms on component mount
   useEffect(() => {
     axios.get("http://localhost:5157/api/Rooms").then((response) => {
       setRooms(response.data);
     });
   }, []);
 
+  // Handler for when a room is clicked on the table
   const handleRoomClick = (roomId) => {
     setSelectedRoomId(roomId);
     setShowModal(true);
   };
 
+  // Handler for closing the modal
   const handleCloseModal = () => {
     setShowModal(false);
   };
@@ -49,10 +52,12 @@ const Hotel = () => {
         </tbody>
       </Table>
 
+      {/* Modal for making a reservation */}
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title className="text-center w-100">
             Reserve
+            {/* Close button in the top right corner */}
             <Button
               variant="link"
               className="position-absolute top-0 end-0"

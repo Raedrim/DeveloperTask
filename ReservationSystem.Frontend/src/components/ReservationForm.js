@@ -4,22 +4,26 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
 const ReservationForm = ({ roomId }) => {
+  // Define state hooks for the form data, success message, and error message
   const [formData, setFormData] = useState({
     dateFrom: "",
     dateTo: "",
     numberOfPeople: "",
   });
-
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
+  // Handle changes to form fields and update the form data accordingly
   const handleChange = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
 
+  // Handle form submission
   const handleSubmit = async (event) => {
+    // Prevent the default form submission behavior
     event.preventDefault();
 
+    // Validate the form data and display an error message if it's invalid
     if (formData.numberOfPeople <= 0) {
       setSuccessMessage("");
       setErrorMessage("The number of people must be greater than 0.");
@@ -27,6 +31,7 @@ const ReservationForm = ({ roomId }) => {
     }
 
     try {
+      // Submit the reservation data to the API and display a success message if it's successful
       const response = await axios.post(
         "http://localhost:5157/api/Reservations",
         {
@@ -36,13 +41,16 @@ const ReservationForm = ({ roomId }) => {
           numberOfPeople: formData.numberOfPeople,
         }
       );
-
       setSuccessMessage("Reservation created successfully");
+
+      //mocked email sending, writing to the console
+      //TODO: implement email sending
       console.log(
         `EMAIL SENT TO test@admin.com FOR CREATED Reservation WITH ID ${response.data.id}`
       );
       setErrorMessage("");
     } catch (error) {
+      // Display an error message if the reservation submission fails
       if (error.response && error.response.data) {
         alert(`Error: ${JSON.stringify(error.response.data)}`);
       } else {
@@ -53,6 +61,7 @@ const ReservationForm = ({ roomId }) => {
     }
   };
 
+  // Render the form with Bootstrap styling
   return (
     <div>
       {successMessage && <p>{successMessage}</p>}
